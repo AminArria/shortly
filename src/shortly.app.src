@@ -1,0 +1,17 @@
+{application, shortly,
+ [{description, "URL shortener"},
+  {vsn, "0.1.0"},
+  {registered, []},
+  {mod, { shortly_app, []}},
+  {applications,
+   [kernel,
+    stdlib,
+    cowboy
+   ]},
+  {env,[]},
+  {modules, []},
+
+  {maintainers, []},
+  {licenses, ["Apache 2.0"]},
+  {links, []}
+ ]}.
