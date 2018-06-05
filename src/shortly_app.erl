@@ -17,13 +17,15 @@
 start(_StartType, _StartArgs) ->
     ets:new(urls, [set, named_table, public]),
     Dispatch = cowboy_router:compile([
-        {'_', [{"/[...]", shortly_handler, []}]}
+        {'_', [
+            {"/http/[...]", shortly_handler, #{}},
+            {"/rest/[...]", shortly_rest_handler, #{}}
+        ]}
     ]),
-    {ok, _} = cowboy:start_clear(http,
+    cowboy:start_clear(http,
         [{port, 8080}],
         #{env => #{dispatch => Dispatch}}
     ).
-    % shortly_sup:start_link().
 
 
 %%--------------------------------------------------------------------

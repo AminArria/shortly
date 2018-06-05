@@ -5,13 +5,11 @@
         ]).
 
 save_url(Url) ->
-  Url_formatted = lists:join(<<"/">>, Url),
-  Hash = hash_url(Url_formatted),
-  ets:insert(urls, {Hash, Url_formatted}),
+  Hash = hash_url(Url),
+  ets:insert(urls, {Hash, Url}),
   Hash.
 
-get_long_url(Hashes) ->
-  Hash = erlang:iolist_to_binary(lists:join(<<"/">>, Hashes)),
+get_long_url(Hash) ->
   case ets:lookup(urls, Hash) of
     [] ->
       error;
