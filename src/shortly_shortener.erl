@@ -7,6 +7,7 @@
 save_url(Url) ->
   Hash = hash_url(Url),
   ets:insert(urls, {Hash, Url}),
+  send_notifications(Url, Hash),
   Hash.
 
 get_long_url(Hash) ->
@@ -25,3 +26,8 @@ get_long_url(Hash) ->
 hash_url(Url) ->
   Hash = crypto:hash(md5, Url),
   base64:encode(Hash).
+
+send_notifications(Url, Hash) ->
+  lists:foreach(fun(Pid) ->
+    Pid ! {new_url, Url, Hash}
+  end, pg2:get_members(ws_connections)).

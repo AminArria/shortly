@@ -15,11 +15,13 @@
 %%====================================================================
 
 start(_StartType, _StartArgs) ->
+    pg2:create(ws_connections),
     ets:new(urls, [set, named_table, public]),
     Dispatch = cowboy_router:compile([
         {'_', [
             {"/http/[...]", shortly_handler, #{}},
-            {"/rest/[...]", shortly_rest_handler, #{}}
+            {"/rest/[...]", shortly_rest_handler, #{}},
+            {"/news", shortly_news_handler, #{}}
         ]}
     ]),
     cowboy:start_clear(http,
