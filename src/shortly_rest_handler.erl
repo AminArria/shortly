@@ -40,7 +40,5 @@ shortly_to_json(Req, State) ->
 shortly_post_url(Req0, State) ->
   Url = erlang:iolist_to_binary(lists:join(<<"/">>, cowboy_req:path_info(Req0))),
   Hash = shortly_shortener:save_url(Url),
-  Req = cowboy_req:reply(200, #{
-    <<"content-type">> => <<"text/plain">>
-  }, Hash, Req0),
+  Req = cowboy_req:set_resp_body(Hash, Req0),
   {true, Req, State}.
