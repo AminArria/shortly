@@ -17,8 +17,7 @@
 %%====================================================================
 
 start(_StartType, _StartArgs) ->
-    pg2:create(ws_connections),
-    ets:new(urls, [set, named_table, public]),
+    syn:init(),
     {ok, Port} = application:get_env(shortly, port),
     Dispatch = cowboy_router:compile([
         {'_', [

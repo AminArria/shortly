@@ -8,8 +8,8 @@ init(Req, State) ->
   {cowboy_websocket, Req, State}.
 
 websocket_init(State) ->
-    pg2:join(ws_connections, self()),
-    {ok, State}.
+  syn:join(ws_connections, self()),
+  {ok, State}.
 
 websocket_handle(InFrame, State) ->
   {ok, State}.

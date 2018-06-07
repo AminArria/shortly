@@ -1,7 +1,11 @@
 {"1.1.0",
 [{<<"cowboy">>,{pkg,<<"cowboy">>,<<"2.4.0">>},0},
  {<<"cowlib">>,{pkg,<<"cowlib">>,<<"2.3.0">>},1},
- {<<"ranch">>,{pkg,<<"ranch">>,<<"1.5.0">>},1}]}.
+ {<<"ranch">>,{pkg,<<"ranch">>,<<"1.5.0">>},1},
+ {<<"syn">>,
+  {git,"git://github.com/ostinelli/syn.git",
+       {ref,"9bfe15189e52589a2a831755f26fb3966ab76701"}},
+  0}]}.
 [
 {pkg_hash,[
  {<<"cowboy">>, <<"F1B72FABE9C8A5FC64AC5AC85FB65474D64733D1DF52A26FAD5D4BA3D9F70A9F">>},
