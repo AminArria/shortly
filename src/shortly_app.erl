@@ -17,6 +17,7 @@
 start(_StartType, _StartArgs) ->
     pg2:create(ws_connections),
     ets:new(urls, [set, named_table, public]),
+    {ok, Port} = application:get_env(shortly, port),
     Dispatch = cowboy_router:compile([
         {'_', [
             {"/http/[...]", shortly_handler, #{}},
@@ -25,7 +26,7 @@ start(_StartType, _StartArgs) ->
         ]}
     ]),
     cowboy:start_clear(http,
-        [{port, 8080}],
+        [{port, Port}],
         #{env => #{dispatch => Dispatch}}
     ).
 
