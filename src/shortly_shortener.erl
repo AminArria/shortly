@@ -4,17 +4,24 @@
          get_long_url/1
         ]).
 
+-record(shortly_urls, {hash, url}).
+
 save_url(Url) ->
   Hash = hash_url(Url),
-  ets:insert(urls, {Hash, Url}),
+  mnesia:activity(transaction, fun() ->
+      mnesia:write(#shortly_urls{hash=Hash, url=Url})
+    end),
   send_notifications(Url, Hash),
   Hash.
 
 get_long_url(Hash) ->
-  case ets:lookup(urls, Hash) of
+  Result = mnesia:activity(transaction, fun() ->
+      mnesia:read(shortly_urls, Hash)
+    end),
+  case Result of
     [] ->
       error;
-    [{Hash, Url}] ->
+    [#shortly_urls{hash=Hash, url=Url}] ->
       case http_uri:parse(Url) of
         {ok, _} ->
           {ok, Url};
