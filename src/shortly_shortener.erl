@@ -4,14 +4,15 @@
          get_long_url/1
         ]).
 
+
 save_url(Url) ->
   Hash = hash_url(Url),
-  ets:insert(urls, {Hash, Url}),
+  shortly_db:save_url(Hash, Url),
   send_notifications(Url, Hash),
   Hash.
 
 get_long_url(Hash) ->
-  case ets:lookup(urls, Hash) of
+  case shortly_db:get_url(Hash) of
     [] ->
       error;
     [{Hash, Url}] ->

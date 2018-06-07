@@ -8,7 +8,9 @@
 -behaviour(application).
 
 %% Application callbacks
--export([start/2, stop/1]).
+-export([start/2, stop/1, install/1]).
+
+-record(shortly_urls, {hash, url}).
 
 %%====================================================================
 %% API
@@ -34,6 +36,18 @@ start(_StartType, _StartArgs) ->
 %%--------------------------------------------------------------------
 stop(_State) ->
     ok.
+
+install(Nodes) ->
+    mnesia:stop(),
+    rpc:multicall(Nodes, application, stop, [mnesia]),
+    ok = mnesia:create_schema([node() | Nodes]),
+    mnesia:start(),
+    rpc:multicall(Nodes, application, start, [mnesia]),
+    mnesia:create_table(shortly_urls,
+      [{attributes, record_info(fields, shortly_urls)},
+       {type, set},
+       {ram_copies, Nodes}]),
+    mnesia:stop().
 
 %%====================================================================
 %% Internal functions
