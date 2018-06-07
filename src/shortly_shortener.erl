@@ -35,6 +35,4 @@ hash_url(Url) ->
   base64:encode(Hash).
 
 send_notifications(Url, Hash) ->
-  lists:foreach(fun(Pid) ->
-    Pid ! {new_url, Url, Hash}
-  end, pg2:get_members(ws_connections)).
+  syn:publish(ws_connections, {new_url, Url, Hash}).
